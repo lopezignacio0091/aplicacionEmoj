@@ -46,16 +46,18 @@ namespace ApiEmi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> postCarrito(List<Producto> ListProducto,int idUser)
+        public async Task<ActionResult> postCarrito(Carrito carrito)
         {
             DateTime hoy = DateTime.Today;
-            Carrito carrito = new Carrito();
-            carrito.UsuarioId = idUser;
+            carrito.Fecha = hoy;
+            carrito.Estado = "Nuevo";
+
+            
   
             await _context.Carrito.AddAsync(carrito);
             await _context.SaveChangesAsync();
 
-            return Created(" Se creo un carrito ", ListProducto);
+            return Created(" Se creo un carrito ",carrito);
         }
     }
 }

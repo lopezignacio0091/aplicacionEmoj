@@ -4,14 +4,16 @@ using AcessoDatos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AcessoDatos.Migrations
 {
     [DbContext(typeof(BdEmiContext))]
-    partial class BdEmiContextModelSnapshot : ModelSnapshot
+    [Migration("20210106213447_updateDecimal")]
+    partial class updateDecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

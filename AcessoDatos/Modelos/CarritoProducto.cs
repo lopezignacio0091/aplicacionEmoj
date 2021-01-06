@@ -10,6 +10,6 @@ namespace AcessoDatos.Modelos
         public int Cantidad { get; set; }
         public Producto Producto { get; set; }
         public Carrito Carrito { get; set;}
-        public double Precio { get; set;}
+        public decimal Precio { get; set;}
     }
 }
