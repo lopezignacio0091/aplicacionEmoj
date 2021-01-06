@@ -51,9 +51,7 @@ namespace ApiEmi.Controllers
             DateTime hoy = DateTime.Today;
             Carrito carrito = new Carrito();
             carrito.UsuarioId = idUser;
-            carrito.ListaProductos = ListProducto;
-            carrito.fecha = hoy;
-
+  
             await _context.Carrito.AddAsync(carrito);
             await _context.SaveChangesAsync();
 
