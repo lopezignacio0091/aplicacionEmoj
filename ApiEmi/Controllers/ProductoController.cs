@@ -24,7 +24,9 @@ namespace ApiEmi.Controllers
 
         public async Task<ActionResult <IEnumerable<Producto>>> GetProductos()
         {
-            var listaProductos = await _context.Productos.ToListAsync();
+
+            
+            var listaProductos = await _context.Productos.Include(x=>x.Imagen).Where(x=>x.ProductoId == x.Imagen.ProductoId).ToListAsync();
             if (listaProductos.Count == 0) {
                 return NoContent();
             }
@@ -47,12 +49,13 @@ namespace ApiEmi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> postProducto(Producto producto)
+        public async Task<ActionResult> postCarritoProducto(CarritoProducto carritoProducto)
         {
-            await _context.Productos.AddAsync(producto);
+            carritoProducto.Precio = carritoProducto.Cantidad * carritoProducto.Producto.Precio;
+            await _context.CarritoProductos.AddAsync(carritoProducto);
             await _context.SaveChangesAsync();
 
-            return Created("postProducto Creo un producto",producto);
+            return Created(" Se creo un carrito ", carritoProducto);
         }
     }
 }

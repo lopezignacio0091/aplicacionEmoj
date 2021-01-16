@@ -8,9 +8,6 @@ namespace AcessoDatos.Modelos
     {
         public int ProductoId { get; set; }
         public int ImagenId { get; set; }
-        public Producto Producto { get; set; }
         public string ImagenUrl { get; set; }
-
-
     }
 }

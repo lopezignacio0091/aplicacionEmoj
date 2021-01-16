@@ -4,14 +4,16 @@ using AcessoDatos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AcessoDatos.Migrations
 {
     [DbContext(typeof(BdEmiContext))]
-    partial class BdEmiContextModelSnapshot : ModelSnapshot
+    [Migration("20210106220426_updateCarritoProducto")]
+    partial class updateCarritoProducto
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,14 +29,13 @@ namespace AcessoDatos.Migrations
 
                     b.Property<string>("Estado");
 
-                    b.Property<decimal>("Total");
+                    b.Property<DateTime>("Fecha");
+
+                    b.Property<double>("Total");
 
                     b.Property<int>("UsuarioId");
 
                     b.HasKey("CarritoId");
-
-                    b.HasIndex("UsuarioId")
-                        .IsUnique();
 
                     b.ToTable("Carrito");
                 });
@@ -48,8 +49,6 @@ namespace AcessoDatos.Migrations
                     b.Property<int>("Cantidad");
 
                     b.Property<int>("CarritoId");
-
-                    b.Property<DateTime>("Fecha");
 
                     b.Property<decimal>("Precio");
 
@@ -121,7 +120,7 @@ namespace AcessoDatos.Migrations
 
             modelBuilder.Entity("AcessoDatos.Modelos.Usuario", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UsuarioId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -135,22 +134,14 @@ namespace AcessoDatos.Migrations
 
                     b.Property<string>("Password");
 
-                    b.HasKey("Id");
+                    b.HasKey("UsuarioId");
 
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("AcessoDatos.Modelos.Carrito", b =>
-                {
-                    b.HasOne("AcessoDatos.Modelos.Usuario")
-                        .WithOne("Carrito")
-                        .HasForeignKey("AcessoDatos.Modelos.Carrito", "UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("AcessoDatos.Modelos.CarritoProducto", b =>
                 {
-                    b.HasOne("AcessoDatos.Modelos.Carrito")
+                    b.HasOne("AcessoDatos.Modelos.Carrito", "Carrito")
                         .WithMany("ListaCarritoProductos")
                         .HasForeignKey("CarritoId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -164,7 +155,7 @@ namespace AcessoDatos.Migrations
             modelBuilder.Entity("AcessoDatos.Modelos.Imagen", b =>
                 {
                     b.HasOne("AcessoDatos.Modelos.Producto", "Producto")
-                        .WithMany("Imagenes")
+                        .WithMany()
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

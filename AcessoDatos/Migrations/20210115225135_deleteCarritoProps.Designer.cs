@@ -4,14 +4,16 @@ using AcessoDatos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AcessoDatos.Migrations
 {
     [DbContext(typeof(BdEmiContext))]
-    partial class BdEmiContextModelSnapshot : ModelSnapshot
+    [Migration("20210115225135_deleteCarritoProps")]
+    partial class deleteCarritoProps
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,6 +28,8 @@ namespace AcessoDatos.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Estado");
+
+                    b.Property<DateTime>("Fecha");
 
                     b.Property<decimal>("Total");
 
@@ -48,8 +52,6 @@ namespace AcessoDatos.Migrations
                     b.Property<int>("Cantidad");
 
                     b.Property<int>("CarritoId");
-
-                    b.Property<DateTime>("Fecha");
 
                     b.Property<decimal>("Precio");
 

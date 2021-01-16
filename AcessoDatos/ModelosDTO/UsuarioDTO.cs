@@ -1,10 +1,11 @@
-﻿using System;
+﻿using AcessoDatos.Modelos;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AcessoDatos.Modelos
+namespace AcessoDatos.ModelosDTO
 {
-  public class Usuario
+    public class UsuarioDTO
     {
         public int Id { get; set; }
         public string Nombre { get; set; }
@@ -13,12 +14,12 @@ namespace AcessoDatos.Modelos
 
         public string Email { get; set; }
 
-        public Boolean EsAdmin { get; set;}
+        public Boolean EsAdmin { get; set; }
 
         public string Password { get; set; }
 
-        public virtual Carrito Carrito { get; set;}
+        public virtual Carrito Carrito { get; set; }
 
-      
+        public int CarritoId { get; set; }
     }
 }

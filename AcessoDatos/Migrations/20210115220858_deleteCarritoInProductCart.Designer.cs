@@ -4,14 +4,16 @@ using AcessoDatos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AcessoDatos.Migrations
 {
     [DbContext(typeof(BdEmiContext))]
-    partial class BdEmiContextModelSnapshot : ModelSnapshot
+    [Migration("20210115220858_deleteCarritoInProductCart")]
+    partial class deleteCarritoInProductCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,14 +29,13 @@ namespace AcessoDatos.Migrations
 
                     b.Property<string>("Estado");
 
+                    b.Property<DateTime>("Fecha");
+
                     b.Property<decimal>("Total");
 
                     b.Property<int>("UsuarioId");
 
                     b.HasKey("CarritoId");
-
-                    b.HasIndex("UsuarioId")
-                        .IsUnique();
 
                     b.ToTable("Carrito");
                 });
@@ -48,8 +49,6 @@ namespace AcessoDatos.Migrations
                     b.Property<int>("Cantidad");
 
                     b.Property<int>("CarritoId");
-
-                    b.Property<DateTime>("Fecha");
 
                     b.Property<decimal>("Precio");
 
@@ -104,6 +103,8 @@ namespace AcessoDatos.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CarritoId");
+
                     b.Property<string>("Descripcion");
 
                     b.Property<string>("Nombre");
@@ -116,6 +117,8 @@ namespace AcessoDatos.Migrations
 
                     b.HasKey("ProductoId");
 
+                    b.HasIndex("CarritoId");
+
                     b.ToTable("Productos");
                 });
 
@@ -127,6 +130,10 @@ namespace AcessoDatos.Migrations
 
                     b.Property<string>("Apellido");
 
+                    b.Property<int>("CarritoId");
+
+                    b.Property<int?>("CarritoId1");
+
                     b.Property<string>("Email");
 
                     b.Property<bool>("EsAdmin");
@@ -137,15 +144,9 @@ namespace AcessoDatos.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Usuarios");
-                });
+                    b.HasIndex("CarritoId1");
 
-            modelBuilder.Entity("AcessoDatos.Modelos.Carrito", b =>
-                {
-                    b.HasOne("AcessoDatos.Modelos.Usuario")
-                        .WithOne("Carrito")
-                        .HasForeignKey("AcessoDatos.Modelos.Carrito", "UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("AcessoDatos.Modelos.CarritoProducto", b =>
@@ -164,9 +165,23 @@ namespace AcessoDatos.Migrations
             modelBuilder.Entity("AcessoDatos.Modelos.Imagen", b =>
                 {
                     b.HasOne("AcessoDatos.Modelos.Producto", "Producto")
-                        .WithMany("Imagenes")
+                        .WithMany()
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("AcessoDatos.Modelos.Producto", b =>
+                {
+                    b.HasOne("AcessoDatos.Modelos.Carrito")
+                        .WithMany("listaProducto")
+                        .HasForeignKey("CarritoId");
+                });
+
+            modelBuilder.Entity("AcessoDatos.Modelos.Usuario", b =>
+                {
+                    b.HasOne("AcessoDatos.Modelos.Carrito", "Carrito")
+                        .WithMany()
+                        .HasForeignKey("CarritoId1");
                 });
 #pragma warning restore 612, 618
         }

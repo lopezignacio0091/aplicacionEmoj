@@ -19,17 +19,11 @@ namespace ApiEmi.Controllers
         {
             this._context = context;
         }
-        public async Task<ActionResult<IEnumerable<Imagen>>> GetImagen()
-        {
-           
-            var listaImagenes = await _context.Imagenes.Include(x => x.Producto).ToListAsync();
-        
-            if (listaImagenes.Count == 0)
-            {
-                return NoContent();
-            }
-            return Ok(listaImagenes);
-        }
+        //public async Task<ActionResult<IEnumerable<Imagen>>> GetImagen()
+        //{
+
+          
+        //}
 
 
         [HttpPost]

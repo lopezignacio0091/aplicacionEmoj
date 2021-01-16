@@ -16,7 +16,7 @@ namespace AcessoDatos.Modelos
         public int StockMinimo { get; set; }
 
         public string Nombre { get; set; }
-        List<Imagen> Imagenes { get; set; }
+         public  Imagen  Imagen { get; set; }
 
     }
 }

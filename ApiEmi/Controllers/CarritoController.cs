@@ -34,7 +34,7 @@ namespace ApiEmi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Carrito>> GetCarritoUser(int idUser)
         {
-            //Producto producto = await _context.Productos.FindAsync(id);
+            
             Carrito carrito = await _context.Carrito.FirstOrDefaultAsync(x=>x.UsuarioId == idUser);
             if (carrito == null)
             {
@@ -48,15 +48,18 @@ namespace ApiEmi.Controllers
         [HttpPost]
         public async Task<ActionResult> postCarrito(Carrito carrito)
         {
-            DateTime hoy = DateTime.Today;
-            carrito.Fecha = hoy;
+
             carrito.Estado = "Nuevo";
+            Usuario usuario =  await _context.Usuarios.FirstOrDefaultAsync(x=>x.Id == carrito.UsuarioId);
 
-            
-  
+            carrito.UsuarioId = usuario.Id;
             await _context.Carrito.AddAsync(carrito);
-            await _context.SaveChangesAsync();
+          
+            usuario.Carrito = carrito;
+            _context.Entry(usuario).State=EntityState.Modified;
+            
 
+            await _context.SaveChangesAsync();
             return Created(" Se creo un carrito ",carrito);
         }
     }
