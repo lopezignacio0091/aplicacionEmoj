@@ -45,6 +45,33 @@ namespace ApiEmi.Controllers
             return Ok(carrito);
         }
 
+
+        [HttpPut]
+        public async Task<ActionResult<Carrito>> deleteCarritoProducto(CarritoProducto carritoProducto)
+        {
+            CarritoProducto carritoProductoDto = await _context.CarritoProductos.FirstOrDefaultAsync(x => x.id == carritoProducto.id);
+            Carrito carrito = await _context.Carrito.FirstOrDefaultAsync(x => x.CarritoId == carritoProductoDto.CarritoId);
+
+            carrito.Total = carrito.Total-(carritoProducto.Producto.Precio * carritoProducto.Cantidad);
+
+            carritoProductoDto.Deleted = true;
+
+            _context.Entry(carritoProductoDto).State = EntityState.Modified;
+            _context.Entry(carrito).State = EntityState.Modified;
+
+
+            if (carritoProducto == null)
+            {
+
+                return NotFound("Usted no posee carrito");
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok(carritoProductoDto);
+        }
+
+
+
         [HttpPost]
         public async Task<ActionResult> postCarrito(CarritoProducto carritoProducto)
         {
@@ -58,6 +85,7 @@ namespace ApiEmi.Controllers
                 carritoProducto.Producto = producto;
                 carritoProducto.Precio = carritoProducto.Cantidad * producto.Precio;
                 carritoProducto.Fecha = hoy;
+                carritoProducto.Deleted = false;
                 await _context.CarritoProductos.AddAsync(carritoProducto);
 
 

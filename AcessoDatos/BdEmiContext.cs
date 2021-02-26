@@ -25,5 +25,7 @@ namespace AcessoDatos
         public DbSet<Carrito> Carrito { get; set; }
 
         public DbSet<CarritoProducto> CarritoProductos { get; set;}
+
+        public DbSet<Compra> Compras { get; set;}
     }
 }
