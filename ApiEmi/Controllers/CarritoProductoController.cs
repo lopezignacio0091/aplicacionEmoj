@@ -47,27 +47,28 @@ namespace ApiEmi.Controllers
 
 
         [HttpPut]
-        public async Task<ActionResult<Carrito>> deleteCarritoProducto(CarritoProducto carritoProducto)
+        public async Task<ActionResult<Carrito>> DeleteCarritoProducto(CarritoProducto carritoProducto)
         {
-            CarritoProducto carritoProductoDto = await _context.CarritoProductos.FirstOrDefaultAsync(x => x.id == carritoProducto.id);
-            Carrito carrito = await _context.Carrito.FirstOrDefaultAsync(x => x.CarritoId == carritoProductoDto.CarritoId);
+            
+                CarritoProducto carritoProductoDto = await _context.CarritoProductos.FirstOrDefaultAsync(x => x.id == carritoProducto.id);
+                Carrito carrito = await _context.Carrito.FirstOrDefaultAsync(x => x.CarritoId == carritoProductoDto.CarritoId);
 
-            carrito.Total = carrito.Total-(carritoProducto.Producto.Precio * carritoProducto.Cantidad);
+                carrito.Total = carrito.Total - (carritoProductoDto.Precio * carritoProducto.Cantidad);
 
-            carritoProductoDto.Deleted = true;
+                carritoProductoDto.Deleted = true;
 
-            _context.Entry(carritoProductoDto).State = EntityState.Modified;
-            _context.Entry(carrito).State = EntityState.Modified;
+                _context.Entry(carritoProductoDto).State = EntityState.Modified;
+                _context.Entry(carrito).State = EntityState.Modified;
 
+                if (carritoProducto == null)
+                {
 
-            if (carritoProducto == null)
-            {
+                    return NotFound("Usted no posee carrito");
+                }
 
-                return NotFound("Usted no posee carrito");
-            }
-
-            await _context.SaveChangesAsync();
-            return Ok(carritoProductoDto);
+                await _context.SaveChangesAsync();
+                return Ok(carritoProductoDto);
+                     
         }
 
 
@@ -78,7 +79,7 @@ namespace ApiEmi.Controllers
             DateTime hoy = DateTime.Today;
             Carrito carrito = await _context.Carrito.FirstOrDefaultAsync(x => x.CarritoId == carritoProducto.CarritoId);
             Producto producto = await _context.Productos.FirstOrDefaultAsync(x => x.ProductoId == carritoProducto.ProductoId);
-            CarritoProducto carritoProductoDto = await _context.CarritoProductos.FirstOrDefaultAsync(x => x.CarritoId == carritoProducto.CarritoId && x.ProductoId == carritoProducto.ProductoId);
+            CarritoProducto carritoProductoDto = await _context.CarritoProductos.FirstOrDefaultAsync(x => x.CarritoId == carritoProducto.CarritoId && x.ProductoId == carritoProducto.ProductoId && x.Deleted== false);
 
             if (carritoProductoDto == null)
             {

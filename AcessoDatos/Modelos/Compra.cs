@@ -10,5 +10,7 @@ namespace AcessoDatos.Modelos
         public decimal Total { get; set;}
         public DateTime Fecha { get; set; }
         public virtual List<CarritoProducto> listaCarritoProductos { get; set;}
+
+        public Usuario usuario {get; set;}
     }
 }

@@ -27,33 +27,40 @@ namespace ApiEmi.Controllers
 
             Compra compra = new Compra();
             DateTime Hoy = DateTime.Today;
-            Usuario usuario = await _context.Usuarios.Include(x => x.Carrito).ThenInclude(x => x.ListaCarritoProductos).ThenInclude(x => x.Producto).FirstOrDefaultAsync(x => x.Id == carrito.UsuarioId);
+            Usuario usuario = await _context.Usuarios.Include(x => x.Carrito).ThenInclude(x => x.ListaCarritoProductos ).ThenInclude(x => x.Producto).FirstOrDefaultAsync(x => x.Id == carrito.UsuarioId);
 
 
+            usuario.Carrito.ListaCarritoProductos.Where(x => x.Deleted == false);
             compra.Fecha = Hoy;
             compra.listaCarritoProductos = usuario.Carrito.ListaCarritoProductos;
             compra.Total = usuario.Carrito.Total;
+            compra.usuario = usuario;
 
             descontarProducto(compra.listaCarritoProductos);
             await _context.Compras.AddAsync(compra);
-
-            usuario.Carrito.ListaCarritoProductos.Clear();
-            usuario.Carrito.Total = 0; 
-            
-
             _context.Entry(usuario).State = EntityState.Modified;
-
-
             await _context.SaveChangesAsync();
+            inicilizandoCarrito(usuario.Carrito);
             return Created(" Se Realizo la compra con exito ", carrito);
         }
+
+        public async void inicilizandoCarrito(Carrito carrito)
+        {
+
+            carrito.ListaCarritoProductos.Clear();
+            carrito.Total = 0;
+
+            _context.Entry(carrito).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
 
         public async void descontarProducto(List<CarritoProducto> listaCarritoProducto) {
              
             try
                 {  
                var listaProductos = await _context.Productos.ToListAsync();
-            foreach(CarritoProducto c in listaCarritoProducto) {
+                    foreach(CarritoProducto c in listaCarritoProducto) {
                     Producto producto = listaProductos.FirstOrDefault(x => x.ProductoId == c.Producto.ProductoId);
                     if (producto.Stock != 0)
                     {
@@ -61,11 +68,21 @@ namespace ApiEmi.Controllers
                         _context.Entry(producto).State = EntityState.Modified;
                     }
                 }
-               
+
+                
+                   
             }
             catch (Exception e) {
                     Console.WriteLine(e.ToString());
                 }
+        }
+
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Compra>>> GetCompras()
+        {
+            var listaCompras = await _context.Compras.Include(x=>x.listaCarritoProductos).ThenInclude(x => x.Producto).Include(x=>x.usuario).ToListAsync();
+            return Ok(listaCompras);
         }
     }
 }

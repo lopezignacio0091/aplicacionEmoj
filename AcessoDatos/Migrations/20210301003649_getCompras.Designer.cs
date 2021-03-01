@@ -4,14 +4,16 @@ using AcessoDatos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AcessoDatos.Migrations
 {
     [DbContext(typeof(BdEmiContext))]
-    partial class BdEmiContextModelSnapshot : ModelSnapshot
+    [Migration("20210301003649_getCompras")]
+    partial class getCompras
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,11 +82,7 @@ namespace AcessoDatos.Migrations
 
                     b.Property<decimal>("Total");
 
-                    b.Property<int?>("usuarioId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("usuarioId");
 
                     b.ToTable("Compras");
                 });
@@ -189,13 +187,6 @@ namespace AcessoDatos.Migrations
                         .WithMany()
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("AcessoDatos.Modelos.Compra", b =>
-                {
-                    b.HasOne("AcessoDatos.Modelos.Usuario", "usuario")
-                        .WithMany()
-                        .HasForeignKey("usuarioId");
                 });
 
             modelBuilder.Entity("AcessoDatos.Modelos.Imagen", b =>
